@@ -21,5 +21,12 @@ namespace ecnfSandboxLib
             Console.WriteLine($"{sender._aSentence} and consumed by a 2nd Eventhandler.");
         }
 
+
+        /********************* Predefined Event API **************************/
+
+        public void ConsumeApiEvent(object sender, StringEventArgs args)
+        {
+            Console.WriteLine($"{args.V}"); //object != EventPublisher -> no field _aSentence :(
+        }
     }
 }

@@ -35,21 +35,35 @@ namespace ecnfSandboxConsole
             //execute customly defined event:
             publisher.Publish();
 
-            /********************* Predefined Event API **************************/
+            /** Event Api  **/
+            publisher.ApiEvent += subscriber.ConsumeApiEvent;
 
+            //execute Api defined event:
+            publisher.PublishApiEvent();
 
             /*                          Fazit
-             * [Customly Defined Event]
-             * 1) delegate definiert Signatur (Rückgabetyp, Parameterliste)
-             * 2) Eventhandler müssen die vom delegate vordefinierte Sig erfüllen.
-             * 3) EventHandler werden in der Main() o.ä. registriert (event += handlermethod)
-             * 4) ob ich "public void MyEvent(object sender, string argument)
-             *    oder   "     ...    My Event(object sender, StringEventArgs argObj)
-             *    mache, ist mir überlassen. Zweiteres lässt einem mehr Werte übermitteln.
-             * 5) by using +=, you can register multiple EventHandlers (= methods)
-             * 
-             * [Predefined Event API]
-             **/
+          * [Customly Defined Event]
+          * 1) delegate definiert Signatur (Rückgabetyp, Parameterliste)
+          * 2) Eventhandler müssen die vom delegate vordefinierte Sig erfüllen.
+          * 3) EventHandler werden in der Main() o.ä. registriert (event += handlermethod)
+          * 4) ob ich "public void MyEvent(object sender, string argument)
+          *    oder   "     ...    My Event(object sender, StringEventArgs argObj)
+          *    mache, ist mir überlassen. Zweiteres lässt einem mehr Werte übermitteln.
+          * 5) by using +=, you can register multiple EventHandlers (= methods)
+          * 
+          * [Predefined Event API]
+          * 1) public event EventHandler<StringEventArgs> ApiEvent; belongs to 
+          *    the subscriber and implicitely defines the event signature (see 2) ).
+          * 1.b) It saves the 'public delegate void MyEventDefinitioin(...)' - line
+          * 2) The EventHandlingMethod must conform this signatur:
+          *    - return: void
+          *    - parameter list: (object sender, xyEventArgs args)
+          *    Note, that sender won't deliver the fields from its 
+          *    children class - meaning the publisher.
+          *    Possible work around: add the publisher instance to args.
+          * 3) Anything else just like @<[Customly Defined Event]
+          **/
+
 
             Console.WriteLine("Leaving Event Experiments\n");
         }
