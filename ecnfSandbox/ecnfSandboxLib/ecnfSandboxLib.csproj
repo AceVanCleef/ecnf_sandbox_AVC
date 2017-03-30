@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="ChainedDelegates.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Vector2D_Struct.cs" />
     <Compile Include="WhyDelegates.cs" />
     <Compile Include="WhyDelegatesWithObjects.cs" />
   </ItemGroup>
