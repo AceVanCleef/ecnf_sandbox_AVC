@@ -16,27 +16,56 @@ namespace ecnfSandboxConsole
             /* Executing experiments: */
             ExecuteWhyDelegatesExperiments();
             ExecuteChainedDelegatesExperiments();
+            ExecuteEventExperiments();
 
             Console.ReadKey();
 
         }
 
-        public static bool OnlyOfLengthThree(string s)
+        private static void ExecuteEventExperiments()
         {
-            return s.Length == 3;
+            Console.WriteLine("\n[Executing Event Experiments]");
+            EventPublisher publisher = new EventPublisher();
+            EventSubscriber subscriber = new EventSubscriber();
+
+            //EventHandler registrieren:
+            publisher.eventSent += subscriber.ReceiveEvent;
+            publisher.eventSent += subscriber.IEatEventsTwo;
+
+            //execute customly defined event:
+            publisher.Publish();
+
+            /********************* Predefined Event API **************************/
+
+
+            /*                          Fazit
+             * [Customly Defined Event]
+             * 1) delegate definiert Signatur (Rückgabetyp, Parameterliste)
+             * 2) Eventhandler müssen die vom delegate vordefinierte Sig erfüllen.
+             * 3) EventHandler werden in der Main() o.ä. registriert (event += handlermethod)
+             * 4) ob ich "public void MyEvent(object sender, string argument)
+             *    oder   "     ...    My Event(object sender, StringEventArgs argObj)
+             *    mache, ist mir überlassen. Zweiteres lässt einem mehr Werte übermitteln.
+             * 5) by using +=, you can register multiple EventHandlers (= methods)
+             * 
+             * [Predefined Event API]
+             **/
+
+            Console.WriteLine("Leaving Event Experiments\n");
         }
+        
 
 
         private static void ExecuteChainedDelegatesExperiments()
         {
+            Console.WriteLine($"\n[Executing Chaineddelegates Experiment]");
+
             ChainedDelegates delegateObj = new ChainedDelegates(5, "Tim");
             int calcResult = delegateObj.doMaths(5);
             string concatResult = delegateObj.doConcatination("Tim");
 
-            Console.WriteLine($"\n[Executing Chaineddelegates Experiment]");
             Console.WriteLine($"using 'int doMaths(int x)' chained delegate: Result = {calcResult}");
             Console.WriteLine($"using 'string doConcatination(string s)' chained delegate: Result = {concatResult}");
-            Console.WriteLine("Exiting ChainedDelegates Experiment \n");
 
             /* Fazit:
              * Nur das return der zuletzt angehängten Methode wird vom delegate zurückgegeben.
@@ -45,6 +74,13 @@ namespace ecnfSandboxConsole
              * Gibt es ein Use Case, in welchem es sinnvoll ist, verkettete delegates zu benutzen?
              * Dabei sollten alle dem delegate angehängten Methoden ausgeführt werden.
              **/
+            Console.WriteLine("Leaving ChainedDelegates Experiment \n");
+
+        }
+
+        public static bool OnlyOfLengthThree(string s)
+        {
+            return s.Length == 3;
         }
 
         private static void ExecuteWhyDelegatesExperiments()
@@ -123,7 +159,7 @@ namespace ecnfSandboxConsole
              * Fazit: Objektmethoden gehen auch. 
              **/
 
-            Console.WriteLine("Exiting WhyDelegatesExperiments \n");
+            Console.WriteLine("Leaving WhyDelegatesExperiments \n");
         }
     }
 }
