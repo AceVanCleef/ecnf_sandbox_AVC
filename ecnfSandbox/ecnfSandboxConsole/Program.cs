@@ -23,9 +23,20 @@ namespace ecnfSandboxConsole
 
         }
 
+
+        /******************** Test Area ***********************/
+
+        private static void ExecuteOverrideVirtualExperiments()
+        {
+            PrintIntroText("Override - Virtual (Inheritance)");
+
+            PrintOutroText("Override - Virtual (Inheritance)");
+        }
+
+
         private static void ExecuteEventExperiments()
         {
-            Console.WriteLine("\n[Executing Event Experiments]");
+            PrintIntroText("Event");
             EventPublisher publisher = new EventPublisher();
             EventSubscriber subscriber = new EventSubscriber();
 
@@ -66,13 +77,12 @@ namespace ecnfSandboxConsole
           **/
 
 
-            Console.WriteLine("Leaving Event Experiments\n");
+            PrintOutroText("Event");
         }
         
         private static void ExecuteStructExperiments()
         {
-            Console.WriteLine($"\n[Executing Struct Experiment]");
-
+            PrintIntroText("Struct");
             Vector2D_Struct vector1 = new Vector2D_Struct(5, 2);
             Console.WriteLine($"vector1's coordinates are: ({vector1.x}|{vector1.y})");
 
@@ -120,14 +130,13 @@ namespace ecnfSandboxConsole
              **/
 
 
-            Console.WriteLine("Leaving Struct Experiment \n");
+            PrintOutroText("Struct");
         }
 
 
         private static void ExecuteChainedDelegatesExperiments()
         {
-            Console.WriteLine($"\n[Executing Chaineddelegates Experiment]");
-
+            PrintIntroText("ChainedDelegates");
             ChainedDelegates delegateObj = new ChainedDelegates(5, "Tim");
             int calcResult = delegateObj.doMaths(5);
             string concatResult = delegateObj.doConcatination("Tim");
@@ -142,8 +151,7 @@ namespace ecnfSandboxConsole
              * Gibt es ein Use Case, in welchem es sinnvoll ist, verkettete delegates zu benutzen?
              * Dabei sollten alle dem delegate angehängten Methoden ausgeführt werden.
              **/
-            Console.WriteLine("Leaving ChainedDelegates Experiment \n");
-
+            PrintOutroText("ChainedDelegates");
         }
 
         public static bool OnlyOfLengthThree(string s)
@@ -153,7 +161,7 @@ namespace ecnfSandboxConsole
 
         private static void ExecuteWhyDelegatesExperiments()
         {
-            Console.WriteLine("\n [Executing WhyDelegates Experiments]");
+            PrintIntroText("WhyDelegates");
             /********** A) WhyDelegates *************/
             Console.WriteLine("WhyDelegates results: ");
             int[] numbers = new[] { 5, 15, 10, 25, 8, 20 };
@@ -227,7 +235,17 @@ namespace ecnfSandboxConsole
              * Fazit: Objektmethoden gehen auch. 
              **/
 
-            Console.WriteLine("Leaving WhyDelegatesExperiments \n");
+            PrintOutroText("WhyDelegates");
+        }
+
+        private static void PrintIntroText(string testname)
+        {
+            Console.WriteLine($"\n[Executing {testname} Experiments]");
+        }
+
+        private static void PrintOutroText(string testname)
+        {
+            Console.WriteLine($"Leaving {testname} Experiments. \n");
         }
     }
 }
