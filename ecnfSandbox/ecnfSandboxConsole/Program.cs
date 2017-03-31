@@ -1,4 +1,5 @@
 ﻿using ecnfSandboxLib;
+using ecnfSandboxLib.InheritanceOverriding;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,6 +19,7 @@ namespace ecnfSandboxConsole
             ExecuteChainedDelegatesExperiments();
             ExecuteEventExperiments();
             ExecuteStructExperiments();
+            ExecuteOverrideVirtualExperiments();
 
             Console.ReadKey();
 
@@ -29,6 +31,96 @@ namespace ecnfSandboxConsole
         private static void ExecuteOverrideVirtualExperiments()
         {
             PrintIntroText("Override - Virtual (Inheritance)");
+
+            /********************** Test Data *********************/
+            //Create ofType Person
+            Person personA = new Person("(P) Tim", "Meier");
+            Person personB = new Employee("(P) Rolf", "Könner", "Finance");
+            Person personC = new Manager("(P) Hans", "Vader", "Steering Committee Board", "CEO");
+
+            //introducing more specific ref.types
+            Employee personD = new Employee("(E) Walter", "Denzler", "Research");
+            Employee personE = new Manager("(E) John", "Travolta", "Research", "Lead Physicist");
+
+            //introducing a most specific ref.type
+            Manager personF = new Manager("(M) Cloud", "Strife", "FinalFantasy7", "Infantryman");
+
+
+            /********************** Testing Area *********************/
+
+            //all 'override'
+            Console.WriteLine("\n PrintPerson() \n Combo: override, override, override");
+            personA.PrintPerson();
+            personB.PrintPerson();
+            personC.PrintPerson();
+            //using more specific ref.types (Employee)
+            personD.PrintPerson();
+            personE.PrintPerson();
+            //using a most specific ref.type (Manager)
+            personF.PrintPerson();
+
+            //all 'virtual'
+            Console.WriteLine("\n PrintFavoriteFood() \n Combo: virtual, virtual, virtual");
+            personA.PrintFavoriteFood();
+            personB.PrintFavoriteFood();
+            personC.PrintFavoriteFood();
+            //using more specific ref.types (Employee)
+            personD.PrintFavoriteFood();
+            personE.PrintFavoriteFood();
+            //using a most specific ref.type (Manager)
+            personF.PrintFavoriteFood();
+
+            //virtual, override, virtual
+            Console.WriteLine("\n HasADog() \n Combo: virtual, override, virtual':");
+            personA.PrintHasADog();
+            personB.PrintHasADog();
+            personC.PrintHasADog();
+            //using more specific ref.types (Employee)
+            personD.PrintHasADog();
+            personE.PrintHasADog();
+            //using a most specific ref.type (Manager)
+            personF.PrintHasADog();
+
+            //virtual vs. new virtual
+            Console.WriteLine("\n PrintVirtualVsNewVirtual() \n Combo: 'virtual vs. new virtual':");
+            personA.PrintVirtualVsNewVirtual();
+            personB.PrintVirtualVsNewVirtual();
+
+            Console.WriteLine("Glossary: \n (P) means 'Person ___ = new Person/Employee/Manager()'." +
+                                " \n (E) means 'Employee ___ = new Employee/Manager().'" +
+                                " \n (M) means 'Manager ___ = new Manager()'");
+
+
+            /*                          Fazit:
+             * [override, overide, override]
+             * 1) Der Konstruktortyp bestimmt, welche Version ausgeführt wird:
+             *      Person ___ = new <was hier steht, bestimmt, was ausgeführt wird>()
+             *      -> normale Polymorphie
+             * 
+             * [virtual, virtual, virtual]
+             * 1) Der Referenztyp bestimmt, welche Version ausgeführt wird.
+             *      <was hier steht, beeinflusst, was ausgeführt wird> ___ = new Person/Employee/Manager()
+             * 
+             * [virtual, override, virtual]
+             * 1) Bei Person ___ = <bel. Konstruktortyp>() fungiert 'override'
+             *    als neuer Ankertyp für alle darunter nachfolgenden Kinder.
+             * 1.b) Bei virtual, override, virtual, override überschreibt das 
+             *      zweite override das vorhergehende.
+             * Note: Hier achten, ob Ref.Typ oder Konstruktortyp relevant ist.
+             *    
+             * [virtual vs. new virtual]
+             * - new virtual has no overriding effect.
+             * - new is meant to be a diversifier:
+             * "So, if you are doing real polymorphism you SHOULD ALWAYS 
+             *  OVERRIDE. The only place where you need to use "new" is 
+             *  when the method is not related in any way to the base class 
+             *  version." (albertein: http://stackoverflow.com/questions/159978/c-sharp-keyword-usage-virtualoverride-vs-new)
+             * 
+             *  -> This would be appropriate if you create a method with the same name
+             *     as the one in the base class, but implement it totally differently.
+             *     this way, you set up a NEW INHERITANCE ANCHOR FOR CHILDREN CLASSES.
+             **/
+
 
             PrintOutroText("Override - Virtual (Inheritance)");
         }

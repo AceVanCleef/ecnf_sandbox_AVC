@@ -8,8 +8,12 @@ namespace ecnfSandboxLib.InheritanceOverriding
 {
     public class Person
     {
-        private string FirstName;
-        private string LastName;
+        public string FirstName { get; }
+        public string LastName { get; }
+
+        private string favoriteFood = "Apple";
+
+        private bool hasADog = true;
 
         public Person(string firstname, string lastname)
         {
@@ -20,6 +24,21 @@ namespace ecnfSandboxLib.InheritanceOverriding
         public virtual void PrintPerson()
         {
             Console.WriteLine($"My name is: {FirstName} {LastName}");
+        }
+
+        public virtual void PrintFavoriteFood()
+        {
+            Console.WriteLine($"{FirstName}'s favorite food is: {favoriteFood}");
+        }
+
+        public virtual void PrintHasADog()
+        {
+            Console.WriteLine($"Has {FirstName} a dog: {hasADog}. \t used: Person ___ = new {this.GetType().Name}()");
+        }
+
+        public virtual void PrintVirtualVsNewVirtual()
+        {
+            Console.WriteLine($"{FirstName} reports: Printed 'virtual void PrintVirtualVsNewVirtual().'");
         }
     }
 }
