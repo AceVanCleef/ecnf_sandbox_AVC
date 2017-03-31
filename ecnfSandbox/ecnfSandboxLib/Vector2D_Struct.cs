@@ -11,12 +11,18 @@ namespace ecnfSandboxLib
      * -------------------------------------------------------------------
      * 
      *   [Why Structs]
-     * - encapsulate small groups of related variables
-     * - used for small, lightweight objects (an object with few fields)
+     * - encapsulate small groups of related variables (max. 4 integers <= 16 bytes)
+     * - used instead of small objects (with few fields) to save memory.
      * - using many structs is more performant than many classes.
+     * 
+     *   Note: structs are more lightweight than objects (see Value Type or Reference Type).
      * 
      *   [Value Type or Reference Type?]
      *   Structs are value type (classes are reference type).
+     *   Note: Value type lives on the stack, 
+     *         reference type lives on the heap, 
+     *         having a reference to it on the stack.
+     *         Structs avoid memory overhead.
      * 
      *   [What could be potentially used within a struct]
      * - can contain...
@@ -49,5 +55,18 @@ namespace ecnfSandboxLib
 
     public struct Vector2D_Struct
     {
+        public int x;
+        public int y; // public int y = 0; -> Error: direct initialization is illegal
+
+        public Vector2D_Struct(int x, int y)
+        {
+            this.x = x;
+            this.y = y;
+        }
+
+        public static Vector2D_Struct operator +(Vector2D_Struct a, Vector2D_Struct b)
+        {
+            return new Vector2D_Struct(a.x + b.x, a.y + b.y);
+        }
     }
 }

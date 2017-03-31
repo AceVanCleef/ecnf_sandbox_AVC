@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChainedDelegates.cs" />
+    <Compile Include="DelegatesUsingRefParams.cs" />
     <Compile Include="EventPublisher.cs" />
     <Compile Include="EventSubscriber.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

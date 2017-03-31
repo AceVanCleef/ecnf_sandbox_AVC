@@ -17,6 +17,7 @@ namespace ecnfSandboxConsole
             ExecuteWhyDelegatesExperiments();
             ExecuteChainedDelegatesExperiments();
             ExecuteEventExperiments();
+            ExecuteStructExperiments();
 
             Console.ReadKey();
 
@@ -68,6 +69,59 @@ namespace ecnfSandboxConsole
             Console.WriteLine("Leaving Event Experiments\n");
         }
         
+        private static void ExecuteStructExperiments()
+        {
+            Console.WriteLine($"\n[Executing Struct Experiment]");
+
+            Vector2D_Struct vector1 = new Vector2D_Struct(5, 2);
+            Console.WriteLine($"vector1's coordinates are: ({vector1.x}|{vector1.y})");
+
+            //Überschreiben eines Feldes
+            vector1.x = 0;
+            //Addieren auf einem Feld
+            vector1.y += 7;
+            Console.WriteLine($"and after changing its values using '=' and '+=': ({vector1.x}|{vector1.y})");
+
+            //Felderinitialisierung ohne Konstruktor
+            Vector2D_Struct vector2;
+            vector2.x = 15;
+            vector2.y = 12;
+            Console.WriteLine($"vector2's coordinates are: ({vector2.x}|{vector2.y})." + 
+                    "\n You don't have to use a constructor if you... \n 1.) declare the struct instance and \n 2.) initialize its fields where you're going to use it.");
+
+            //operator overloading:
+            Vector2D_Struct vector3 = vector1 + vector2;
+            Console.WriteLine($"vector3's coordinates using operator+ overloading are: \n " +
+                $"({vector1.x}|{vector1.y}) + ({vector2.x}|{vector2.y}) = ({vector3.x}|{vector3.y})");
+            vector3 += vector3;
+            Console.WriteLine($"vector3 += vector3 = ({vector3.x}|{vector3.y})");
+
+            //Zuweisung:
+            vector3 = vector2;
+            Console.WriteLine($"'vector3 = vector2' = ({vector3.x}|{vector3.y})");
+
+
+            /* Fazit:
+             * [Innerhalb des Structs]
+             * 1) illegal: public int x = 0; -> Error
+             * 2) Kontruktor immer mit Parameter! Sonst Error.
+             * 3) Operator overloading kann ganz nützlich sein:
+             *      vector3 = vector1 + vector2   statt
+             *      vector3.x = vector1.x + vector2.x; und das selbe für y.
+             * 
+             * [Beim Structaufrufer (invoker)]
+             * 1) Structfelder initialisieren via Konstruktor oder...
+             * 2) ...so:
+             *      Vector2D struct;
+             *      struct.x = 3; struct.y = 5;
+             * 3) Felder können überschrieben werden: vector1.x = 2;
+             * 4) Auf Feldern kann gerechnet werden: vector1.x += 7;
+             * 
+             **/
+
+
+            Console.WriteLine("Leaving Struct Experiment \n");
+        }
 
 
         private static void ExecuteChainedDelegatesExperiments()
@@ -81,7 +135,7 @@ namespace ecnfSandboxConsole
             Console.WriteLine($"using 'int doMaths(int x)' chained delegate: Result = {calcResult}");
             Console.WriteLine($"using 'string doConcatination(string s)' chained delegate: Result = {concatResult}");
 
-            /* Fazit:
+            /*                      Fazit:
              * Nur das return der zuletzt angehängten Methode wird vom delegate zurückgegeben.
              * 
              * Frage:
