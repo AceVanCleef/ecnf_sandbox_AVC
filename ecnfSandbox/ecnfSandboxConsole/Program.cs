@@ -20,6 +20,9 @@ namespace ecnfSandboxConsole
             ExecuteEventExperiments();
             ExecuteStructExperiments();
             ExecuteOverrideVirtualExperiments();
+            ExecuteOptionalParametersExperiments();
+            ExecuteNamedParametersExperiments();
+            ExecuteAnonymousTypesExperiments();
 
             Console.ReadKey();
 
@@ -27,6 +30,191 @@ namespace ecnfSandboxConsole
 
 
         /******************** Test Area ***********************/
+
+       
+        private static void ExecuteAnonymousTypesExperiments()
+        {
+            PrintIntroText("Anonymous Type(s)");
+
+            //A true anonymous type
+            var personA = new
+            {
+                firstname = "Tim",
+                lastname = "Meier"
+            }; //carefull: ; needed
+            
+            Console.WriteLine($"personA is ofType: {personA.GetType().Name} and equals: {personA.firstname} {personA.lastname}" +
+                                "\t Used: var p = new {firstname ='Tim', lastname = 'Meier'}");
+
+
+            //This won't work:
+            //Person personB = new  { ... }
+            //Baby baby = new { name = "Akiko", age = 1 };
+
+            // No longer anoynmous (..= new Person())
+            var personB = new Person("Marc", "Zuckerburg");
+            Console.WriteLine($"personB is ofType: {personB.GetType().Name} and equals: {personB.FirstName} {personB.LastName}" +
+                                            "\t\t Used: var p = new Person('Marc', 'Zuckerburg')");
+
+            //arrays
+            var intarray = new[] {1, 5 };
+            var doublearray = new[] { 1, 5, 2.5 };
+            var stringarray = new[] { "Tom", "Meier" };
+            var objArray = new[] { new Person("Anna", "Celdora") , personB };
+
+            //Can't mix types:
+            //var array = new[] { 1, 2, "Tim" };
+
+            //variables
+            var i = 5;
+            Console.WriteLine($"i is ofType: {i.GetType().Name} and equals: {i} \t\t\t\t Used: var i = 5");
+            var p = new Person("Heinz", "Klöss");
+            Console.WriteLine($"p is ofType: {p.GetType().Name} and equals: {p.FirstName} {p.LastName} \t\t\t Used: var p = new Person('Heinz','Klöss')");
+
+
+
+            /*                      Fazit:
+             * [Anonymous objects]
+             * 1) are of type "anonymou": var person = new { name = "Tim" }
+             * 2) you can't say 'Person p = new {...}
+             * 3) but this works: var p = new Person()
+             *    p is now of type Person.
+             *    
+             * [Anonymous Arrays initialization]
+             * var array = new[] {....}
+             * 1) Elements must always be of same type.
+             * 2) var array = new[] {1,3} gets auto-converted to int[].
+             * 
+             * [Anonymous Variables]
+             * var x;
+             * 1) var i = 5; i gets auto-converted to integer.
+             * 2) var p = new Persion() gets auto-converted to Person.
+             **/
+
+            PrintOutroText("Anonymous Type(s)");
+        }
+
+
+        private static void ExecuteNamedParametersExperiments()
+        {
+            PrintIntroText("Named Parameters");
+            /* [Named Params]
+             * Syntax in a method call: foo(a: 5, name: "Hello");
+             * 
+             * Quote:
+             * "Named parameters are an alternate parameter syntax. They 
+             * sometimes result in easier to read and clearer code. 
+             * They are checked for correctness by the compiler. By 
+             * specifying the formal parameter name, we can reorder 
+             * arguments."
+             * (source: https://www.dotnetperls.com/named-parameters )
+             * 
+             **/
+
+            NamedParameters paramsmaster = new NamedParameters();
+            // traditional, normal way of declaring parameters
+            paramsmaster.PrintThese("John", "Cena", "Wrestling", "normal, no named params");
+            //makes code more readably :)
+            paramsmaster.PrintThese(firstname: "John",
+                lastname: "Cena",
+                hobby: "Wrestling",
+                syntaxmode: "with named params, following parameter list's order");
+            //you can even mix the order!
+            paramsmaster.PrintThese(hobby: "Wrestling",
+                syntaxmode: "with named params too, but mixed order",
+                firstname: "John",
+                lastname: "Cena");
+
+            PrintOutroText("Named Parameters");
+        }
+
+
+        private static void ExecuteOptionalParametersExperiments()
+        {
+            PrintIntroText("Optional Parameters");
+
+            /* [4 Ways of having optional parameters]
+         * 1) use parameter arrays (params keyword)
+         * 2) Method overloading
+         * 3) Specify parameter defaults
+         * 4) use OptionalAttribute that is present in System.Runtime.InteropServices namespace
+         * 
+         * [Naming parameters]
+         * 5) you can name a parameter like...
+         *      calculator.AddIntsUsingDefaultParams(3, 5, d: 10);
+         *    Most useful to skip a default param or leave all other ones out.
+         *      calculator.AddIntUsingDefaultParams(d: 10);
+         *      
+         * In OptionalParameters class, I will focus on 1), 2) and 3) and also test 5).
+         **/
+
+            OptionalParameters calculator = new OptionalParameters();
+            // 1) parameter array (params int[] restOfNumbers)
+            // No optional params:
+            var resultA = calculator.AddIntegersByParamsArray(3, 5);
+            // optional parameters, using literals
+            var resultB = calculator.AddIntegersByParamsArray(3, 5, 7, 8);
+            //optional parameters, using an array
+            int[] intarray = new[] { 7, 8 };
+            var resultC = calculator.AddIntegersByParamsArray(3, 5, intarray);
+            Console.WriteLine("\n AddIntegersByParamsArray(int a, int b, params int[] restOfIntegers)" +
+                            $"\n Add..(3,5) = {resultA}" +
+                            $"\n Add..(3,5,7,8) = {resultB}" +
+                            "\n Add..(3,5,new[]{7,8}) = "+ $"{resultC}" +
+                            "\n 7 and 8 are optional parameters.");
+
+            // 2) calling overloaded Methods
+            var resultD = calculator.AddIntsByMethodOverload(3, 5);
+            var resultE = calculator.AddIntsByMethodOverload(3, 5, 7);
+            Console.WriteLine("\n AddIntegersByMethodOverload(int a, int b )" +
+                            $"\n Add..(3,5) = {resultD}" +
+                            "\n AddIntegersByMethodOverload(int a, int b, int c)" +
+                            $"\n Add..(3,5,7) = {resultE}" +
+                            "\n 7 is the optional parameter.");
+
+            // 3) default parameters
+            var resultF = calculator.AddIntsUsingDefaultParams(3, 5);
+            var resultG = calculator.AddIntsUsingDefaultParams(3, 5, 7);
+            var resultH = calculator.AddIntsUsingDefaultParams(3, 5, 7, 8);
+            Console.WriteLine("\n AddIntegersUsingDefaultParams(int a, int b, int c = 0, int d = 0)" +
+                            $"\n Add..(3,5) = {resultF}" +
+                            $"\n Add..(3,5,7) = {resultG}" +
+                            $"\n Add..(3,5,7,8) = {resultH}" +
+                            "\n 7 and 8 are optional parameters.");
+
+            // 5) using named argument
+            var resultI = calculator.AddIntsUsingDefaultParams(3, 5, d: 10);
+            var resultJ = calculator.AddIntsByMethodOverload(3, 5, c: 5);
+            var resultK = calculator.AddIntegersByParamsArray(3, 5, restOfNumbers: new[] {10,20});
+            Console.WriteLine("\n You can name parameters:" +
+                        $"\n AddIntsUsingDefaultParams(3, 5, d: 10) = {resultI}" +
+                        $"\n AddIntsByMethodOverload(3, 5, c: 5) = {resultJ}" +
+                        "\n AddIntegersByParamsArray(3,5, restOfNumbers: new[] {10,20}) = ${resultK}" +
+                        "\n Note: Naming params is only really useful if you can skip a default parameter.");
+
+
+            /*                          Fazit:
+             * [What Optional Params are]
+             * Optional parameters are those you don't have to explicetily declare.
+             * They...
+             * 1) are not needed (see params int[] restOfNumbers)
+             * 2) are not needed (see method overloading: parameter int c)
+             * 3) have a default value within the method signatur.
+             * 
+             * [Using Named Parameters]
+             * 5) In combination with optional params, they are very useful
+             *    to skip some default values. For example...
+             *      string ConcatThese(string firstname = "", string lastname = "", string hobby = "")
+             *      {
+             *          return "My name is "firstname +" "+ lastname +" and my hobby is "+ hobby;
+             *      }
+             *    you could only give one parameters...
+             *      var str = ConcatThese(lastname: "Maurer");
+             **/
+
+            PrintOutroText("Optional Parameters");
+        }
+
 
         private static void ExecuteOverrideVirtualExperiments()
         {
