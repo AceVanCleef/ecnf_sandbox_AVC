@@ -23,6 +23,7 @@ namespace ecnfSandboxConsole
             ExecuteOptionalParametersExperiments();
             ExecuteNamedParametersExperiments();
             ExecuteAnonymousTypesExperiments();
+            ExecuteAnonymousFunctionsExperiments();
 
             Console.ReadKey();
 
@@ -31,7 +32,99 @@ namespace ecnfSandboxConsole
 
         /******************** Test Area ***********************/
 
-       
+        private static void ExecuteAnonymousFunctionsExperiments()
+        {
+            PrintIntroText("Anonymous Functions");
+
+            /* Testing Plan:
+             * 1) anonymous functions
+             * 2) closure: seeing the values outside of anonymous functions.
+             **/
+
+            //Anonymous functoin
+            Func<int, bool> func = delegate (int x)
+            {
+                return x % 2 == 0;
+            };
+            int k = 20;
+            Console.WriteLine("\n Func<int,bool> func = delegate (int x) { x%2 == 0 }" +
+                $"\n func({k});" +
+                $"\n I love anonymous functions. {k}%2 == 0 equals: {func(k)}");
+            //same using lambda
+            Func<int, bool> func2 = x => x % 2 == 0;
+            Console.WriteLine("\n Func<int,bool> func2 = x => x % 2 == 0" +
+               $"\n func2({k});" +
+               $"\n Using lambda is even cooler. {k}%2 == 0 equals: {func(k)}");
+
+            //both, func and func2, are regarded as 1st class functions.
+
+            /***** What about closures? *****/
+            string name = "John Cena";         //A free variable
+            Func<string> PrintThis = delegate ()
+            {
+                //name isn't a parameter nor a local variable! 
+                // It's called a free variable. The delegate will see it!
+                return $"And his name is {name}";
+            };
+            Console.WriteLine("\n Closure (anonymous functions see free variables)" +
+                $"\n This delegate sees its free variable: '{PrintThis()}'");
+
+            //And if the value of 'string name' gets changed, it will see the new value:
+            name = "Hans Vader";
+            Console.WriteLine($" The value of the free variable got changed. The delegate sees the new value: '{PrintThis()}'");
+
+
+            //since PrintThis is a first class function, it encloses name
+            // In short: anonymous function -> 1st class function -> sees free variables
+
+
+            /*                  Fazit:
+             * [1st Class Functions]
+             * 1) Anonymous Functions are considered 1st Class Functions 
+             *    by the compiler.
+             * 2) 1st Class Functions (Anonymous) see free variables. 
+             *    They enclose them.
+             *    
+             * [Free Variables]
+             * 1) are variables, which are neither...
+             *      - used as parameter     (e.g. foo(myvar) )
+             *      - nor a local variable  (e.g. foo() { var myvar = -1; }
+             *    ...but used within the anonymous function such as...
+             *      - foo() { return $"My name is {firstname}"; }
+             * 
+             * [Closure]
+             * 1) The compiler sees when an anonymous function
+             *    uses a free variable. The free variable will be
+             *    memorized as part of the anonymous function.
+             *    If the value of the free variable changes,
+             *    the anonymous function uses this new value.
+             * 
+             * [Unerwünschte Nebeneffekte]
+             * 1) Man erhält andere Werte von der anonymen Funktion zurück 
+             *    als erwartet (wenn man sich der Closure nicht bewusst ist).
+             * 
+             * 
+             * [Um unerwünschte Nebeneffekte von Closure zu vermeiden:]
+             * 1) sei dir bewusst, dass eine freie Variable weiterlebt
+             * 2) oder verzichte auf darauf, freie Variablen zu verwenden.
+             *    Definiere stattdessen lieber einen Parameter.
+             * 
+             * [Potenzial der Closure]
+             * 1) eine anonyme Funktion bauen, die immer mit dem aktuellsten 
+             *    Wert einer freien Variablen arbeitet.
+             *    Der Wert lässt sich aktualisieren.
+             * 
+             * [What happens backstage?]
+             * 1) C# compiler detects when 1st class function encloses a 
+             * free variable
+             * 2) The compiler puts the delegate and the free variable into a 
+             *    backstage generated class.
+             * 
+             **/
+
+            PrintOutroText("Anonymous Functions");
+        }
+
         private static void ExecuteAnonymousTypesExperiments()
         {
             PrintIntroText("Anonymous Type(s)");
@@ -82,6 +175,7 @@ namespace ecnfSandboxConsole
             //Person pNotWorking = (Person)personA;
 
 
+            
             /*                      Fazit:
              * [Anonymous objects]
              * 1) are of type "anonymou": var person = new { name = "Tim" }
