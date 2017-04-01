@@ -64,6 +64,7 @@ namespace ecnfSandboxConsole
 
             //Can't mix types:
             //var array = new[] { 1, 2, "Tim" };
+            //var anonymarr = new[]:
 
             //variables
             var i = 5;
@@ -71,6 +72,14 @@ namespace ecnfSandboxConsole
             var p = new Person("Heinz", "Klöss");
             Console.WriteLine($"p is ofType: {p.GetType().Name} and equals: {p.FirstName} {p.LastName} \t\t\t Used: var p = new Person('Heinz','Klöss')");
 
+            //conversion (casting)
+            int j = i;
+            int[] integers = intarray;
+            Person p2 = p;
+
+            //Doesn't work without Conversion Definition:
+            //Person pNotWorking = personA;
+            //Person pNotWorking = (Person)personA;
 
 
             /*                      Fazit:
@@ -89,6 +98,31 @@ namespace ecnfSandboxConsole
              * var x;
              * 1) var i = 5; i gets auto-converted to integer.
              * 2) var p = new Persion() gets auto-converted to Person.
+             * 
+             * [What is special about it?]
+             * 1) Anonymous Objects!
+             *      Use them within a method or LINQ-Query for temporary use.
+             *      
+             *      Quote:
+             *      "Anonymous types are designed to be used from the scope in 
+             *      which they are created. No other scope should ever know 
+             *      about that anonymous type's definition, so since you want 
+             *      to be returning this object from a method, an anonymous 
+             *      type is not appropriate.
+             *
+             *      In general, the idea is that the object is used in just 
+             *      one or two places, all in the same method, and it's use is 
+             *      so simple and straightforward that there just is no need 
+             *      to create a new named type. They are also immutable, 
+             *      and creating immutable objects in C# is...more verbose.
+             *      (source: Servy, http://stackoverflow.com/questions/21443117/why-use-anonymous-types-instead-of-creating-a-class)
+             *      
+             *      If you were to use them outside their "birth scope",
+             *      you would have to define how the type conversion (cast)
+             *      would work using...
+             *          static explicity operator Person(object anonymous){} 
+             *      
+             * 2) Automatic Type Finding: var x = ...
              **/
 
             PrintOutroText("Anonymous Type(s)");
