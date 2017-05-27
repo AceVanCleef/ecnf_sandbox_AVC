@@ -25,12 +25,64 @@ namespace ecnfSandboxConsole
             ExecuteAnonymousTypesExperiments();
             ExecuteAnonymousFunctionsExperiments();
 
+            ExecuteParallelProgrammingWorksheet();
+
+            //Test 2: Async, Multithreading, Dynamic types, reflection
+            ExecuteTaskAsynchronousProgrammingExperiments();
+
+
             Console.ReadKey();
 
         }
 
 
         /******************** Test Area ***********************/
+
+        private async static void ExecuteTaskAsynchronousProgrammingExperiments() {
+            PrintIntroText("async/await (TAP)");
+
+            //Note: experiments will be held and documented within TAP.cs
+            TAP asyncLib = new TAP();
+
+            //1) you can use them to get resources from networks such as the internet
+            string txtContent = await asyncLib.DownloadTXTFromInternetAsync();
+            Console.WriteLine($"The downloaded .txt contained:\n \\\"{txtContent}\\\"");
+
+            //2) or to calculate expensive calculations (expens. in runtime or memory)
+            //   by giving this Task to another thread, freeing the UI thread (prevents unresponsive GUI).
+            int[,] gameboard = asyncLib.setup2DGameBoard();
+            Boolean gameIsWon = await asyncLib.isTicTacToeGameWonAsync(gameboard);
+
+            asyncLib.printGameBoard(gameboard);
+            Console.WriteLine($"Has the TicTacToe match been won: {gameIsWon}");
+
+            /* Note:
+             * ..that an async method will always return 
+             * - Task<T>, 
+             * - Task (for void (an async method returning nothing)) or 
+             * (- void (nothing -> nur für EventHandler).)
+             * The await method converts a Task<string> automatically to a string
+             * or return await - delegates it further ( a ..= await will be waiting).
+             */
+
+            PrintOutroText("async/await (TAP)");
+        }
+
+
+
+
+        private static void ExecuteParallelProgrammingWorksheet()
+        {
+            PrintIntroText("Parallel Programming Worksheet");
+
+
+            //var resultSet = ParallelProgramming.CalculatePrimeAsMultirheadedByPLING(100);
+            
+
+            PrintOutroText("Parallel Programming Worksheet");
+        }
+
+
 
         private static void ExecuteAnonymousFunctionsExperiments()
         {
@@ -120,6 +172,7 @@ namespace ecnfSandboxConsole
              * 2) The compiler puts the delegate and the free variable into a 
              *    backstage generated class.
              * 
+             * (source: http://www.codethinked.com/c-closures-explained )
              **/
 
             PrintOutroText("Anonymous Functions");
